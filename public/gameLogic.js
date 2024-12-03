@@ -1,10 +1,10 @@
 // Объявление переменных для доски и игры
-var board = null
+let board = null
 let game = new Chess() // Создание экземпляра объекта игры с использованием chess.js
 
 // Цвета для подсветки клеток
-var whiteSquareGrey = '#a9a9a9'
-var blackSquareGrey = '#696969'
+const whiteSquareGrey = '#a9a9a9'
+const blackSquareGrey = '#696969'
 
 // Функция для удаления подсветки клеток
 function removeGreySquares () {
@@ -13,8 +13,8 @@ function removeGreySquares () {
 
 // Функция для подсветки клетки
 function greySquare (square) {
-  var $square = $('#board .square-' + square)
-  var background = whiteSquareGrey
+  let $square = $('#board .square-' + square)
+  let background = whiteSquareGrey
   if ($square.hasClass('black-3c85d')) {
     background = blackSquareGrey
   }
@@ -38,13 +38,14 @@ $(document).ready(function () {
     onSnapEnd: onSnapEnd
   })
 
-  let playerColor = null // Цвет игрока, назначаемый сервером
+  // let playerColor = null // Цвет игрока, назначаемый сервером
   // socket.on('playerColor', function (color) {
   //     playerColor = color;
   //     if (playerColor === 'b') {
   //         board.orientation('black'); // Перевернуть доску для черных
   //     }
   // });
+
   // Обновление доски при получении хода с сервера
   socket.on('updateBoard', function (fen) {
     game.load(fen)
@@ -93,9 +94,9 @@ $(document).ready(function () {
   }
 
   // Обработка наведения мыши на клетку
-  function onMouseoverSquare (square, piece) {
+  function onMouseoverSquare (square) {
     // Получить список всех возможных ходов для данной клетки
-    var moves = game.moves({
+    let moves = game.moves({
       square: square,
       verbose: true
     })
@@ -107,7 +108,7 @@ $(document).ready(function () {
     greySquare(square)
 
     // Подсветить возможные ходы, включая взятие фигур
-    for (var i = 0; i < moves.length; i++) {
+    for (let i = 0; i < moves.length; i++) {
       // Проверяем, является ли ход взятием
       if (moves[i].flags.includes('c')) {
         // Подсветка для взятия может быть другой
@@ -119,13 +120,13 @@ $(document).ready(function () {
   }
 
   // Обработка ухода мыши с клетки
-  function onMouseoutSquare (square, piece) {
+  function onMouseoutSquare () {
     removeGreySquares()
   }
 
   // Обновление статуса игры
   function updateStatus () {
-    let status = ''
+    let status
     let moveColor = game.turn() === 'w' ? 'White' : 'Black'
 
     // Проверка на мат
@@ -145,15 +146,15 @@ $(document).ready(function () {
 
   // Отображение истории ходов
   function renderMoveHistory (moves) {
-    var historyElement = $('#move-history')
+    let historyElement = $('#move-history')
     historyElement.empty()
 
-    var formattedMoves = []
+    let formattedMoves = []
 
-    for (var i = 0; i < moves.length; i++) {
+    for (let i = 0; i < moves.length; i++) {
       // Определяем цвет игрока и форматируем ход
-      var moveColor = (i % 2 === 0) ? 'white-move' : 'black-move'
-      var currentMove = moves[i]
+      let moveColor = (i % 2 === 0) ? 'white-move' : 'black-move'
+      let currentMove = moves[i]
 
       // Если это взятие, добавляем подсветку и формат
       if (currentMove.includes('x')) {
